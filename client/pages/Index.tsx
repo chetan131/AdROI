@@ -1,62 +1,84 @@
-import { DemoResponse } from "@shared/api";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { TrendingUp, Activity, DollarSign, MousePointerClick } from "lucide-react";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 
 export default function Index() {
-  const [exampleFromServer, setExampleFromServer] = useState("");
-  // Fetch users on component mount
-  useEffect(() => {
-    fetchDemo();
-  }, []);
-
-  // Example of how to fetch data from the server (if needed)
-  const fetchDemo = async () => {
-    try {
-      const response = await fetch("/api/demo");
-      const data = (await response.json()) as DemoResponse;
-      setExampleFromServer(data.message);
-    } catch (error) {
-      console.error("Error fetching hello:", error);
-    }
-  };
+  const data = useMemo(
+    () =>
+      Array.from({ length: 30 }).map((_, i) => ({
+        day: i + 1,
+        roi: Number((1.4 + Math.sin(i / 5) * 0.2 + (i / 120)).toFixed(2)),
+      })),
+    [],
+  );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
-      <div className="text-center">
-        {/* TODO: FUSION_GENERATION_APP_PLACEHOLDER replace everything here with the actual app! */}
-        <h1 className="text-2xl font-semibold text-slate-800 flex items-center justify-center gap-3">
-          <svg
-            className="animate-spin h-8 w-8 text-slate-400"
-            viewBox="0 0 50 50"
-          >
-            <circle
-              className="opacity-30"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-            />
-            <circle
-              className="text-slate-600"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-              strokeDasharray="100"
-              strokeDashoffset="75"
-            />
-          </svg>
-          Generating your app...
-        </h1>
-        <p className="mt-4 text-slate-600 max-w-md">
-          Watch the chat on the left for updates that might need your attention
-          to finish generating
-        </p>
-        <p className="mt-4 hidden max-w-md">{exampleFromServer}</p>
+    <div className="space-y-8">
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">AdROI Dashboard</h1>
+          <p className="text-muted-foreground">Analyze campaign ROI and act with confidence.</p>
+        </div>
+        <div className="flex gap-2">
+          <Button asChild>
+            <a href="/insights">View Insights</a>
+          </Button>
+          <Button variant="secondary" asChild>
+            <a href="/actions">Recommended Actions</a>
+          </Button>
+          <Button variant="outline" asChild>
+            <a href="/reports">Reports</a>
+          </Button>
+        </div>
       </div>
+
+      <div className="grid gap-4 md:grid-cols-4">
+        <MetricCard title="Overall ROI" value="1.8x" icon={<TrendingUp className="text-primary" />} />
+        <MetricCard title="Spend (30d)" value="$124,300" icon={<DollarSign className="text-primary" />} />
+        <MetricCard title="CTR" value="3.4%" icon={<MousePointerClick className="text-primary" />} />
+        <MetricCard title="Conversions" value="8,245" icon={<Activity className="text-primary" />} />
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>ROI Trend • Last 30 days</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={{ roi: { label: "ROI", color: "hsl(var(--primary))" } }}
+            className="aspect-[16/6]"
+          >
+            <LineChart data={data} margin={{ left: 8, right: 8, bottom: 8 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} />
+              <YAxis domain={[1, 2.2]} tickLine={false} axisLine={false} tickMargin={8} />
+              <Line type="monotone" dataKey="roi" stroke="var(--color-roi)" strokeWidth={2} dot={false} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+            </LineChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
     </div>
+  );
+}
+
+function MetricCard({ title, value, icon }: { title: string; value: string; icon: React.ReactNode }) {
+  return (
+    <Card className="shadow-sm">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+        {icon}
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-semibold">{value}</div>
+      </CardContent>
+    </Card>
   );
 }
