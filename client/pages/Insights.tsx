@@ -9,14 +9,22 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, BarChart, Bar } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  BarChart,
+  Bar,
+} from "recharts";
 
 export default function Insights() {
   const roiTrend = useMemo(
     () =>
       Array.from({ length: 30 }).map((_, i) => ({
         day: i + 1,
-        roi: Number((1.3 + Math.sin(i / 5) * 0.2 + (i / 120)).toFixed(2)),
+        roi: Number((1.3 + Math.sin(i / 5) * 0.2 + i / 120).toFixed(2)),
       })),
     [],
   );
@@ -42,8 +50,12 @@ export default function Insights() {
     <div className="space-y-8">
       <div className="flex items-end justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">View Insights</h1>
-          <p className="text-muted-foreground">Data-driven insights across channels and campaigns.</p>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            View Insights
+          </h1>
+          <p className="text-muted-foreground">
+            Data-driven insights across channels and campaigns.
+          </p>
         </div>
         <Button asChild>
           <a href="/reports">View Detailed Report</a>
@@ -59,19 +71,44 @@ export default function Insights() {
             <div className="grid grid-cols-2 gap-4">
               <Metric label="Overall ROI" value="1.8x" />
               <Metric label="Top Channel" value="Google Ads" />
-              <Metric label="Top Campaign" value="Q4 Search - US" className="col-span-2" />
+              <Metric
+                label="Top Campaign"
+                value="Q4 Search - US"
+                className="col-span-2"
+              />
             </div>
             <div>
-              <p className="mb-2 text-sm text-muted-foreground">ROI Trend (30d)</p>
+              <p className="mb-2 text-sm text-muted-foreground">
+                ROI Trend (30d)
+              </p>
               <ChartContainer
                 config={{ roi: { label: "ROI", color: "hsl(var(--primary))" } }}
                 className="aspect-[16/9]"
               >
-                <LineChart data={roiTrend} margin={{ left: 8, right: 8, bottom: 8 }}>
+                <LineChart
+                  data={roiTrend}
+                  margin={{ left: 8, right: 8, bottom: 8 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} />
-                  <YAxis domain={[1, 2.2]} tickLine={false} axisLine={false} tickMargin={8} />
-                  <Line type="monotone" dataKey="roi" stroke="var(--color-roi)" strokeWidth={2} dot={false} />
+                  <XAxis
+                    dataKey="day"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                  />
+                  <YAxis
+                    domain={[1, 2.2]}
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="roi"
+                    stroke="var(--color-roi)"
+                    strokeWidth={2}
+                    dot={false}
+                  />
                   <ChartTooltip content={<ChartTooltipContent />} />
                 </LineChart>
               </ChartContainer>
@@ -89,15 +126,23 @@ export default function Insights() {
                 <div key={c.name} className="rounded-lg border p-4 shadow-sm">
                   <div className="mb-1 flex items-center justify-between">
                     <p className="font-medium">{c.name}</p>
-                    <Badge variant={c.roi >= 1.5 ? "default" : "secondary"}>{c.roi.toFixed(1)}x</Badge>
+                    <Badge variant={c.roi >= 1.5 ? "default" : "secondary"}>
+                      {c.roi.toFixed(1)}x
+                    </Badge>
                   </div>
                   <div className="mt-2 grid grid-cols-2 gap-2 text-sm text-muted-foreground">
                     <div>Spend</div>
-                    <div className="text-right font-medium text-foreground">${c.spend.toLocaleString()}</div>
+                    <div className="text-right font-medium text-foreground">
+                      ${c.spend.toLocaleString()}
+                    </div>
                     <div>CTR</div>
-                    <div className="text-right font-medium text-foreground">{c.ctr}%</div>
+                    <div className="text-right font-medium text-foreground">
+                      {c.ctr}%
+                    </div>
                     <div>Conv. Rate</div>
-                    <div className="text-right font-medium text-foreground">{c.cr}%</div>
+                    <div className="text-right font-medium text-foreground">
+                      {c.cr}%
+                    </div>
                   </div>
                 </div>
               ))}
@@ -118,13 +163,43 @@ export default function Insights() {
             }}
             className="aspect-[16/6]"
           >
-            <BarChart data={spendVsRoi} margin={{ left: 8, right: 8, bottom: 8 }}>
+            <BarChart
+              data={spendVsRoi}
+              margin={{ left: 8, right: 8, bottom: 8 }}
+            >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="period" tickLine={false} axisLine={false} tickMargin={8} />
-              <YAxis yAxisId="left" orientation="left" tickLine={false} axisLine={false} />
-              <YAxis yAxisId="right" orientation="right" domain={[0.6, 2.2]} tickLine={false} axisLine={false} />
-              <Bar dataKey="spend" yAxisId="left" fill="var(--color-spend)" radius={[6,6,0,0]} />
-              <Line type="monotone" yAxisId="right" dataKey="roi" stroke="var(--color-roi)" strokeWidth={2} />
+              <XAxis
+                dataKey="period"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+              />
+              <YAxis
+                yAxisId="left"
+                orientation="left"
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                domain={[0.6, 2.2]}
+                tickLine={false}
+                axisLine={false}
+              />
+              <Bar
+                dataKey="spend"
+                yAxisId="left"
+                fill="var(--color-spend)"
+                radius={[6, 6, 0, 0]}
+              />
+              <Line
+                type="monotone"
+                yAxisId="right"
+                dataKey="roi"
+                stroke="var(--color-roi)"
+                strokeWidth={2}
+              />
               <ChartTooltip content={<ChartTooltipContent />} />
               <ChartLegend content={<ChartLegendContent />} />
             </BarChart>
@@ -135,10 +210,20 @@ export default function Insights() {
   );
 }
 
-function Metric({ label, value, className = "" }: { label: string; value: string; className?: string }) {
+function Metric({
+  label,
+  value,
+  className = "",
+}: {
+  label: string;
+  value: string;
+  className?: string;
+}) {
   return (
     <div className={className}>
-      <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">
+        {label}
+      </p>
       <p className="text-lg font-semibold">{value}</p>
     </div>
   );

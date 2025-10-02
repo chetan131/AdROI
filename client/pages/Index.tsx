@@ -1,7 +1,12 @@
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Activity, DollarSign, MousePointerClick } from "lucide-react";
+import {
+  TrendingUp,
+  Activity,
+  DollarSign,
+  MousePointerClick,
+} from "lucide-react";
 import {
   ChartContainer,
   ChartTooltip,
@@ -14,7 +19,7 @@ export default function Index() {
     () =>
       Array.from({ length: 30 }).map((_, i) => ({
         day: i + 1,
-        roi: Number((1.4 + Math.sin(i / 5) * 0.2 + (i / 120)).toFixed(2)),
+        roi: Number((1.4 + Math.sin(i / 5) * 0.2 + i / 120).toFixed(2)),
       })),
     [],
   );
@@ -23,8 +28,12 @@ export default function Index() {
     <div className="space-y-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">AdROI Dashboard</h1>
-          <p className="text-muted-foreground">Analyze campaign ROI and act with confidence.</p>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            AdROI Dashboard
+          </h1>
+          <p className="text-muted-foreground">
+            Analyze campaign ROI and act with confidence.
+          </p>
         </div>
         <div className="flex gap-2">
           <Button asChild>
@@ -40,10 +49,26 @@ export default function Index() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
-        <MetricCard title="Overall ROI" value="1.8x" icon={<TrendingUp className="text-primary" />} />
-        <MetricCard title="Spend (30d)" value="$124,300" icon={<DollarSign className="text-primary" />} />
-        <MetricCard title="CTR" value="3.4%" icon={<MousePointerClick className="text-primary" />} />
-        <MetricCard title="Conversions" value="8,245" icon={<Activity className="text-primary" />} />
+        <MetricCard
+          title="Overall ROI"
+          value="1.8x"
+          icon={<TrendingUp className="text-primary" />}
+        />
+        <MetricCard
+          title="Spend (30d)"
+          value="$124,300"
+          icon={<DollarSign className="text-primary" />}
+        />
+        <MetricCard
+          title="CTR"
+          value="3.4%"
+          icon={<MousePointerClick className="text-primary" />}
+        />
+        <MetricCard
+          title="Conversions"
+          value="8,245"
+          icon={<Activity className="text-primary" />}
+        />
       </div>
 
       <Card>
@@ -57,9 +82,25 @@ export default function Index() {
           >
             <LineChart data={data} margin={{ left: 8, right: 8, bottom: 8 }}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} />
-              <YAxis domain={[1, 2.2]} tickLine={false} axisLine={false} tickMargin={8} />
-              <Line type="monotone" dataKey="roi" stroke="var(--color-roi)" strokeWidth={2} dot={false} />
+              <XAxis
+                dataKey="day"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+              />
+              <YAxis
+                domain={[1, 2.2]}
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+              />
+              <Line
+                type="monotone"
+                dataKey="roi"
+                stroke="var(--color-roi)"
+                strokeWidth={2}
+                dot={false}
+              />
               <ChartTooltip content={<ChartTooltipContent />} />
             </LineChart>
           </ChartContainer>
@@ -69,11 +110,21 @@ export default function Index() {
   );
 }
 
-function MetricCard({ title, value, icon }: { title: string; value: string; icon: React.ReactNode }) {
+function MetricCard({
+  title,
+  value,
+  icon,
+}: {
+  title: string;
+  value: string;
+  icon: React.ReactNode;
+}) {
   return (
     <Card className="shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+        <CardTitle className="text-sm font-medium text-muted-foreground">
+          {title}
+        </CardTitle>
         {icon}
       </CardHeader>
       <CardContent>

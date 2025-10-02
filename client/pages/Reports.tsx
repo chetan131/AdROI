@@ -2,7 +2,14 @@ import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   ChartContainer,
   ChartLegend,
@@ -10,7 +17,15 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, BarChart, Bar } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  BarChart,
+  Bar,
+} from "recharts";
 
 export default function Reports() {
   const [range, setRange] = useState<"7d" | "30d" | "custom">("30d");
@@ -19,7 +34,7 @@ export default function Reports() {
     const points = range === "7d" ? 7 : 30;
     return Array.from({ length: points }).map((_, i) => ({
       day: i + 1,
-      roi: Number((1.3 + Math.sin(i / 4) * 0.2 + (i / (points * 4))).toFixed(2)),
+      roi: Number((1.3 + Math.sin(i / 4) * 0.2 + i / (points * 4)).toFixed(2)),
     }));
   }, [range]);
 
@@ -34,16 +49,51 @@ export default function Reports() {
   );
 
   const campaigns = [
-    { name: "Q4 Search - US", channel: "Google Ads", spend: 42000, conv: 3100, roi: 2.3, cpa: 13.5 },
-    { name: "Holiday Promo - FB", channel: "Facebook", spend: 12000, conv: 650, roi: 1.2, cpa: 18.4 },
-    { name: "IG Retargeting", channel: "Instagram", spend: 9000, conv: 380, roi: 1.1, cpa: 23.7 },
-    { name: "B2B Lead Gen Q4", channel: "LinkedIn", spend: 10200, conv: 560, roi: 1.4, cpa: 18.2 },
+    {
+      name: "Q4 Search - US",
+      channel: "Google Ads",
+      spend: 42000,
+      conv: 3100,
+      roi: 2.3,
+      cpa: 13.5,
+    },
+    {
+      name: "Holiday Promo - FB",
+      channel: "Facebook",
+      spend: 12000,
+      conv: 650,
+      roi: 1.2,
+      cpa: 18.4,
+    },
+    {
+      name: "IG Retargeting",
+      channel: "Instagram",
+      spend: 9000,
+      conv: 380,
+      roi: 1.1,
+      cpa: 23.7,
+    },
+    {
+      name: "B2B Lead Gen Q4",
+      channel: "LinkedIn",
+      spend: 10200,
+      conv: 560,
+      roi: 1.4,
+      cpa: 18.2,
+    },
   ];
 
   const exportCSV = () => {
-    const head = ["Campaign","Channel","Spend","Conversions","ROI","CPA"];
-    const rows = campaigns.map(c => [c.name, c.channel, c.spend, c.conv, c.roi, c.cpa]);
-    const csv = [head, ...rows].map(r => r.join(",")).join("\n");
+    const head = ["Campaign", "Channel", "Spend", "Conversions", "ROI", "CPA"];
+    const rows = campaigns.map((c) => [
+      c.name,
+      c.channel,
+      c.spend,
+      c.conv,
+      c.roi,
+      c.cpa,
+    ]);
+    const csv = [head, ...rows].map((r) => r.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -58,7 +108,11 @@ export default function Reports() {
   };
 
   const shareReport = async () => {
-    const shareData = { title: "AdROI Report", text: "Check out this AdROI report", url: window.location.href };
+    const shareData = {
+      title: "AdROI Report",
+      text: "Check out this AdROI report",
+      url: window.location.href,
+    };
     try {
       if ((navigator as any).share) {
         await (navigator as any).share(shareData);
@@ -74,11 +128,15 @@ export default function Reports() {
       <div className="flex items-end justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Reports</h1>
-          <p className="text-muted-foreground">Download and share detailed performance reports.</p>
+          <p className="text-muted-foreground">
+            Download and share detailed performance reports.
+          </p>
         </div>
         <div className="flex gap-2">
           <Button onClick={exportPDF}>Export as PDF</Button>
-          <Button variant="outline" onClick={shareReport}>Share Report</Button>
+          <Button variant="outline" onClick={shareReport}>
+            Share Report
+          </Button>
         </div>
       </div>
 
@@ -105,12 +163,34 @@ export default function Reports() {
             <CardTitle>ROI Trend</CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={{ roi: { label: "ROI", color: "hsl(var(--primary))" } }} className="aspect-[16/8]">
-              <LineChart data={roiTrend} margin={{ left: 8, right: 8, bottom: 8 }}>
+            <ChartContainer
+              config={{ roi: { label: "ROI", color: "hsl(var(--primary))" } }}
+              className="aspect-[16/8]"
+            >
+              <LineChart
+                data={roiTrend}
+                margin={{ left: 8, right: 8, bottom: 8 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} />
-                <YAxis domain={[1, 2.4]} tickLine={false} axisLine={false} tickMargin={8} />
-                <Line type="monotone" dataKey="roi" stroke="var(--color-roi)" strokeWidth={2} dot={false} />
+                <XAxis
+                  dataKey="day"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                />
+                <YAxis
+                  domain={[1, 2.4]}
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="roi"
+                  stroke="var(--color-roi)"
+                  strokeWidth={2}
+                  dot={false}
+                />
                 <ChartTooltip content={<ChartTooltipContent />} />
               </LineChart>
             </ChartContainer>
@@ -123,15 +203,35 @@ export default function Reports() {
           </CardHeader>
           <CardContent>
             <ChartContainer
-              config={{ spend: { label: "Spend", color: "hsl(var(--accent))" }, roi: { label: "ROI", color: "hsl(var(--primary))" } }}
+              config={{
+                spend: { label: "Spend", color: "hsl(var(--accent))" },
+                roi: { label: "ROI", color: "hsl(var(--primary))" },
+              }}
               className="aspect-[16/8]"
             >
-              <BarChart data={channelComparison} margin={{ left: 8, right: 8, bottom: 8 }}>
+              <BarChart
+                data={channelComparison}
+                margin={{ left: 8, right: 8, bottom: 8 }}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="channel" tickLine={false} axisLine={false} tickMargin={8} />
+                <XAxis
+                  dataKey="channel"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                />
                 <YAxis tickLine={false} axisLine={false} />
-                <Bar dataKey="spend" fill="var(--color-spend)" radius={[6,6,0,0]} />
-                <Line type="monotone" dataKey="roi" stroke="var(--color-roi)" strokeWidth={2} />
+                <Bar
+                  dataKey="spend"
+                  fill="var(--color-spend)"
+                  radius={[6, 6, 0, 0]}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="roi"
+                  stroke="var(--color-roi)"
+                  strokeWidth={2}
+                />
                 <ChartLegend content={<ChartLegendContent />} />
                 <ChartTooltip content={<ChartTooltipContent />} />
               </BarChart>
@@ -144,7 +244,9 @@ export default function Reports() {
         <CardHeader className="flex flex-col gap-1">
           <CardTitle>Campaign Performance</CardTitle>
           <div>
-            <Button size="sm" onClick={exportCSV}>Export CSV</Button>
+            <Button size="sm" onClick={exportCSV}>
+              Export CSV
+            </Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -188,7 +290,9 @@ function KPI({ title, value }: { title: string; value: string }) {
   return (
     <Card className="shadow-sm">
       <CardHeader>
-        <CardTitle className="text-xs uppercase tracking-wide text-muted-foreground">{title}</CardTitle>
+        <CardTitle className="text-xs uppercase tracking-wide text-muted-foreground">
+          {title}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="text-xl font-semibold">{value}</div>

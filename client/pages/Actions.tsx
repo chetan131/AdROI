@@ -4,7 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface ActionItem {
   id: string;
@@ -68,14 +75,20 @@ export default function Actions() {
     Low: actions.filter((a) => a.impact === "Low").length,
   };
 
-  const quickWins = actions.filter((a) => (a.impact === "High" && a.effort !== "High") || a.effort === "Low");
+  const quickWins = actions.filter(
+    (a) => (a.impact === "High" && a.effort !== "High") || a.effort === "Low",
+  );
 
   const markDone = (id: string) => {
-    setActions((prev) => prev.map((a) => (a.id === id ? { ...a, status: "Done" } : a)));
+    setActions((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, status: "Done" } : a)),
+    );
   };
 
   const exportPlan = () => {
-    const blob = new Blob([JSON.stringify(actions, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(actions, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -92,8 +105,12 @@ export default function Actions() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Recommended Actions</h1>
-        <p className="text-muted-foreground">Based on recent campaign performance, these actions can improve ROI.</p>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Recommended Actions
+        </h1>
+        <p className="text-muted-foreground">
+          Based on recent campaign performance, these actions can improve ROI.
+        </p>
       </div>
 
       <Card className="border-primary/20 bg-primary/5">
@@ -168,10 +185,18 @@ export default function Actions() {
                   <TableCell>{a.effort}</TableCell>
                   <TableCell>{a.due}</TableCell>
                   <TableCell>
-                    <Badge variant={a.status === "Open" ? "secondary" : "default"}>{a.status}</Badge>
+                    <Badge
+                      variant={a.status === "Open" ? "secondary" : "default"}
+                    >
+                      {a.status}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button size="sm" onClick={() => markDone(a.id)} disabled={a.status === "Done"}>
+                    <Button
+                      size="sm"
+                      onClick={() => markDone(a.id)}
+                      disabled={a.status === "Done"}
+                    >
                       Mark Done
                     </Button>
                   </TableCell>
@@ -192,7 +217,13 @@ export default function Actions() {
   );
 }
 
-function ActionList({ items, onDone }: { items: ActionItem[]; onDone: (id: string) => void }) {
+function ActionList({
+  items,
+  onDone,
+}: {
+  items: ActionItem[];
+  onDone: (id: string) => void;
+}) {
   return (
     <div className="grid gap-4 md:grid-cols-2">
       {items.map((a) => (
@@ -201,15 +232,27 @@ function ActionList({ items, onDone }: { items: ActionItem[]; onDone: (id: strin
             <CardTitle className="text-base">{a.title}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {a.description ? <p className="text-sm text-muted-foreground">{a.description}</p> : null}
+            {a.description ? (
+              <p className="text-sm text-muted-foreground">{a.description}</p>
+            ) : null}
             <div className="flex flex-wrap gap-2 text-sm">
               <Badge>ROI {a.roi.toFixed(1)}x</Badge>
-              <Badge variant={a.impact === "High" ? "default" : "secondary"}>Impact: {a.impact}</Badge>
-              <Badge variant={a.effort === "Low" ? "default" : "secondary"}>Effort: {a.effort}</Badge>
-              <Badge variant={a.status === "Open" ? "secondary" : "default"}>{a.status}</Badge>
+              <Badge variant={a.impact === "High" ? "default" : "secondary"}>
+                Impact: {a.impact}
+              </Badge>
+              <Badge variant={a.effort === "Low" ? "default" : "secondary"}>
+                Effort: {a.effort}
+              </Badge>
+              <Badge variant={a.status === "Open" ? "secondary" : "default"}>
+                {a.status}
+              </Badge>
             </div>
             <div className="pt-2">
-              <Button size="sm" onClick={() => onDone(a.id)} disabled={a.status === "Done"}>
+              <Button
+                size="sm"
+                onClick={() => onDone(a.id)}
+                disabled={a.status === "Done"}
+              >
                 {a.cta}
               </Button>
             </div>
