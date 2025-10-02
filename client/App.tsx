@@ -36,4 +36,18 @@ const App = () => (
   </QueryClientProvider>
 );
 
-createRoot(document.getElementById("root")!).render(<App />);
+const _container = document.getElementById("root");
+if (!_container) throw new Error("Root container missing");
+
+// Reuse the same root instance to avoid calling createRoot multiple times during HMR
+declare global {
+  interface Window {
+    __ADROI_ROOT__?: import("react-dom/client").Root;
+  }
+}
+
+if (!window.__ADROI_ROOT__) {
+  window.__ADROI_ROOT__ = createRoot(_container);
+}
+
+window.__ADROI_ROOT__.render(<App />);
